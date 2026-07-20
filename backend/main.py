@@ -287,7 +287,6 @@ def is_quota_error(exc):
 
 def safe_generate_content(model_name, prompt):
     try:
-        # Map old layout/broken model names down to correct SDK schema
         actual_model = "gemini-2.5-flash"
         response = client.models.generate_content(model=actual_model, contents=prompt)
         return response.text.strip()
@@ -346,8 +345,16 @@ def simple_cluster_themes(pain_points_list, feedback_items):
 def simple_summary(themes_data):
     if not themes_data:
         return 'No themes could be generated.'
-    top = sorted(themes_data, key=lambda t: t.get('frequency', 0), reverse=True)[:3]
-    return ' '.join([f"Top theme: {t.get('theme', 'Unknown')} ({t.get('frequency', 0)})." for t in top])
+    
+    def get_val(obj, key, default=0):
+        if hasattr(obj, key):
+            return getattr(obj, key)
+        elif isinstance(obj, dict):
+            return obj.get(key, default)
+        return default
+
+    top = sorted(themes_data, key=lambda t: get_val(t, 'frequency', 0), reverse=True)[:3]
+    return ' '.join([f"Top theme: {get_val(t, 'theme', 'Unknown')} ({get_val(t, 'frequency', 0)})." for t in top])
 
 def simple_comparison_narrative(preceding_themes_list, current_themes_list):
     return 'Analysis completed. Current themes were derived from latest feedback.'
@@ -407,7 +414,7 @@ async def ingest(
             text = pytesseract.image_to_string(img)
             items_to_insert.append({
                 "raw_text": text.strip(),
-                "source": filename,  # PRESERVED REAL SOURCE FILE NAME
+                "source": filename,
                 "segment": "general",
                 "customer_id": "unknown"
             })
@@ -419,7 +426,7 @@ async def ingest(
                 text += page.get_text()
             items_to_insert.append({
                 "raw_text": text.strip(),
-                "source": filename,  # PRESERVED REAL SOURCE FILE NAME
+                "source": filename,
                 "segment": "general",
                 "customer_id": "unknown"
             })
@@ -439,7 +446,6 @@ async def ingest(
                         print("FFMPEG error")
                         raise e
                 
-                # Dynamic upload and analysis using real-time genai pipeline
                 uploaded_media = client.files.upload(file=Path(audio_path))
                 response = client.models.generate_content(
                     model="gemini-2.5-flash",
@@ -449,10 +455,9 @@ async def ingest(
                     ]
                 )
                 
-                source_type = "video_call" if filename_lower.endswith(('.mp4', '.mov')) else "call_recording"
                 items_to_insert.append({
                     "raw_text": response.text.strip(),
-                    "source": filename,  # PRESERVED REAL SOURCE FILE NAME
+                    "source": filename,
                     "segment": "general",
                     "customer_id": "unknown"
                 })
@@ -625,13 +630,18 @@ def run_processing_pipeline(run_id: int, strategy: str):
             "Improve Retention": {"Enterprise": 0.4, "SMB": 0.4, "Free": 0.2}
         }
         
-        max_frequency = max([t.get("frequency", 1) for t in themes_data] or [1])
+        def safe_get(obj, key, default=None):
+            if isinstance(obj, dict):
+                return obj.get(key, default)
+            return getattr(obj, key, default)
+
+        max_frequency = max([safe_get(t, "frequency", 1) for t in themes_data] or [1])
         preceding_run = session.query(Run).filter(Run.id < run_id).order_by(Run.id.desc()).first()
         preceding_theme_names = {t.theme.strip().lower() for t in session.query(Theme).filter(Theme.run_id == preceding_run.id).all() if t.theme} if preceding_run else set()
             
         confidence_explanations = []
         if themes_data:
-            explanation_prompt = f"""Generate a single-sentence confidence explanation (max 15 words) for each theme. Output valid JSON array of strings.\n\nThemes:\n{json.dumps(themes_data, indent=2)}"""
+            explanation_prompt = f"""Generate a single-sentence confidence explanation (max 15 words) for each theme. Output valid JSON array of strings.\n\nThemes:\n{json.dumps([t if isinstance(t, dict) else {"theme": t.theme, "frequency": t.frequency} for t in themes_data], indent=2)}"""
             exp_text = safe_generate_content("gemini-2.5-flash", explanation_prompt)
             confidence_explanations = parse_json_response(exp_text) if exp_text else []
                 
@@ -639,31 +649,38 @@ def run_processing_pipeline(run_id: int, strategy: str):
             confidence_explanations.append(None)
                 
         for idx, theme_data in enumerate(themes_data):
-            theme_name = theme_data.get("theme", "Unknown")
-            frequency = theme_data.get("frequency", 1)
-            segments_affected = theme_data.get("segments_affected", [])
-            segment_breakdown = theme_data.get("segment_breakdown", {})
-            source_counts = theme_data.get("source_counts", {})
-            unique_customers = theme_data.get("unique_customers", 1)
-            goal_tag = theme_data.get("goal_tag", "Adoption blocker")
+            theme_name = safe_get(theme_data, "theme", "Unknown")
+            frequency = safe_get(theme_data, "frequency", 1)
+            segments_affected = safe_get(theme_data, "segments_affected", [])
+            segment_breakdown = safe_get(theme_data, "segment_breakdown", {})
+            source_counts = safe_get(theme_data, "source_counts", {})
+            unique_customers = safe_get(theme_data, "unique_customers", 1)
+            goal_tag = safe_get(theme_data, "goal_tag", "Adoption blocker")
             
             customer_impact = (frequency / max_frequency) * 100 if max_frequency > 0 else 0
             severity = 100 if sum(1 for item in items_with_flags if any(f in item['raw_text'].lower() for f in ['churn', 'cancel'])) > len(items_with_flags) * 0.5 else 40
-            top_segment = max(segment_breakdown.keys(), key=lambda k: segment_breakdown[k]) if segment_breakdown else "Unknown"
-            business_impact = (segment_breakdown.get(top_segment, 0) / frequency * 100) if frequency > 0 else 0
+            
+            top_segment = "Unknown"
+            if segment_breakdown and isinstance(segment_breakdown, dict):
+                top_segment = max(segment_breakdown.keys(), key=lambda k: segment_breakdown[k])
+                
+            business_impact = (segment_breakdown.get(top_segment, 0) / frequency * 100) if (frequency > 0 and isinstance(segment_breakdown, dict)) else 0
             strategic_alignment = STRATEGY_WEIGHTS.get(strategy, {}).get(goal_tag, 50)
-            segment_value = sum(segment_breakdown.get(seg, 0) / frequency * SEGMENT_WEIGHTS.get(strategy, {}).get(seg, 0.25) for seg in segment_breakdown.keys()) * 100 if frequency > 0 else 0
+            
+            segment_value = 0
+            if frequency > 0 and isinstance(segment_breakdown, dict):
+                segment_value = sum(segment_breakdown.get(seg, 0) / frequency * SEGMENT_WEIGHTS.get(strategy, {}).get(seg, 0.25) for seg in segment_breakdown.keys()) * 100
             
             priority_score = (0.30 * customer_impact + 0.25 * severity + 0.20 * business_impact + 0.15 * strategic_alignment + 0.10 * segment_value)
-            confidence_pct = min(100, len(source_counts) * 12 + len(segments_affected) * 8 + min(unique_customers, 10) * 5)
-            conf_exp = confidence_explanations[idx] if idx < len(confidence_explanations) else f"Based on {len(source_counts)} sources."
+            confidence_pct = min(100, len(source_counts if source_counts else []) * 12 + len(segments_affected if segments_affected else []) * 8 + min(unique_customers, 10) * 5)
+            conf_exp = confidence_explanations[idx] if idx < len(confidence_explanations) else f"Based on {len(source_counts if source_counts else [])} sources."
             is_new = theme_name.strip().lower() not in preceding_theme_names if preceding_run else False
             
             theme = Theme(
                 run_id=run_id, theme=theme_name, frequency=frequency, segments_affected=segments_affected,
                 segment_breakdown=segment_breakdown, source_counts=source_counts, unique_customers=unique_customers,
-                sentiment=theme_data.get("sentiment", "neutral"), goal_tag=goal_tag, problem_statement=theme_data.get("problem_statement", ""),
-                hypothesis=theme_data.get("hypothesis", ""), bet_size=theme_data.get("bet_size", "M"), sample_quotes=theme_data.get("sample_quotes", []),
+                sentiment=safe_get(theme_data, "sentiment", "neutral"), goal_tag=goal_tag, problem_statement=safe_get(theme_data, "problem_statement", ""),
+                hypothesis=safe_get(theme_data, "hypothesis", ""), bet_size=safe_get(theme_data, "bet_size", "M"), sample_quotes=safe_get(theme_data, "sample_quotes", []),
                 customer_impact=customer_impact, severity=severity, business_impact=business_impact, strategic_alignment=strategic_alignment,
                 segment_value=segment_value, priority_score=priority_score, confidence_pct=confidence_pct, confidence_explanation=conf_exp, is_new=is_new,
                 reasons=[f"Affects {top_segment} segments"]
