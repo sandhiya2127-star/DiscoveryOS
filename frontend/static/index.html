@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiscoveryOS – Product Intelligence</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+    <!-- SVG icons from Lucide will be injected via JS or inline -->
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="sidebar-logo-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <span>DiscoveryOS</span>
+            </div>
+        </div>
+        
+        <nav class="sidebar-nav">
+            <div class="nav-section">Workspace</div>
+            <a href="#" class="nav-item active" data-page="dashboard">
+                <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+                Dashboard
+            </a>
+            <a href="#" class="nav-item" data-page="upload">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                Upload Feedback
+            </a>
+            
+            <div class="nav-section">Analysis</div>
+            <a href="#" class="nav-item" data-page="insights">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                Insights
+            </a>
+            <a href="#" class="nav-item" data-page="summary">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Executive Summary
+            </a>
+            <a href="#" class="nav-item" data-page="roadmap">
+                <svg class="icon" viewBox="0 0 24 24"><path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path></svg>
+                AI Roadmap
+            </a>
+
+            <div class="nav-section">Team Views</div>
+            <a href="#" class="nav-item" data-page="engineering-view">
+                Engineering View
+            </a>
+            <a href="#" class="nav-item" data-page="sales-view">
+                Sales View
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <a href="#" class="nav-item">
+                <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                Help & Support
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-layout">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-breadcrumb" id="headerBreadcrumb">Dashboard</div>
+            <div class="header-actions">
+                <button class="btn btn-primary hover-elevate" id="headerUploadBtn">
+                    <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    Upload feedback
+                </button>
+                <div class="user-menu hover-elevate">
+                    <div class="avatar" id="userAvatar">A</div>
+                    <span style="font-size: 13px; font-weight: 500;" id="userEmailDisplay">Admin</span>
+                    <button id="logoutBtn" style="background: none; border: none; font-size: 12px; color: #94A3B8; cursor: pointer; padding: 4px 8px; border-radius: 6px; font-family: inherit; font-weight: 500;" onmouseenter="this.style.color='#DC2626'" onmouseleave="this.style.color='#94A3B8'">Log out</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="content">
+            
+            <!-- 1. DASHBOARD -->
+            <div id="dashboardPage" class="page active">
+                <div style="margin-bottom: var(--spacing-2xl);">
+                    <h1>Welcome back, Admin</h1>
+                    <p class="subtitle">Turn customer feedback into actions that drive products forward.</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div>
+                        <!-- Quick Links -->
+                        <div class="quick-links">
+                            <div class="quick-link-card hover-elevate" onclick="app.navigateTo('upload')">
+                                <div class="quick-link-icon">
+                                    <svg class="icon icon-lg" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                </div>
+                                <h3>Upload feedback</h3>
+                                <p>Add new feedback files to start a fresh analysis.</p>
+                                <span class="btn btn-primary" style="margin-top: auto;">Upload now</span>
+                            </div>
+                            <div class="quick-link-card hover-elevate" onclick="app.navigateTo('insights')">
+                                <div class="quick-link-icon">
+                                    <svg class="icon icon-lg" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                                </div>
+                                <h3>View latest insights</h3>
+                                <p>Explore insights from your latest analysis.</p>
+                                <span class="btn btn-secondary" style="margin-top: auto;">View insights</span>
+                            </div>
+                        </div>
+
+                        <!-- Recent Analyses -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Recent analyses</h2>
+                            </div>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Run ID</th>
+                                            <th>Strategy</th>
+                                            <th>Files</th>
+                                            <th>Themes</th>
+                                            <th>Created</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentAnalysesBody">
+                                        <!-- Empty State handled by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- KPI Side -->
+                    <div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Key metrics</h2>
+                            </div>
+                            <div class="kpi-list">
+                                <div class="kpi-item">
+                                    <div class="kpi-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></div>
+                                    <div class="kpi-details">
+                                        <div class="kpi-label">Themes Identified</div>
+                                        <div class="kpi-value" id="kpiThemes">-</div>
+                                    </div>
+                                </div>
+                                <div class="kpi-item">
+                                    <div class="kpi-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+                                    <div class="kpi-details">
+                                        <div class="kpi-label">Pain points extracted</div>
+                                        <div class="kpi-value" id="kpiPainPoints">-</div>
+                                    </div>
+                                </div>
+                                <div class="kpi-item">
+                                    <div class="kpi-icon"><svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
+                                    <div class="kpi-details">
+                                        <div class="kpi-label">Average Confidence</div>
+                                        <div class="kpi-value" id="kpiConfidence">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. UPLOAD -->
+            <div id="uploadPage" class="page">
+                <div style="margin-bottom: var(--spacing-2xl);">
+                    <h1>Upload & Sync Feedback</h1>
+                    <p class="subtitle">Upload files manually or sync automatically from your connected integrations.</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <!-- Left column: File upload -->
+                    <div>
+                        <div class="upload-container card">
+                            <div class="dropzone" id="dropZone">
+                                <svg class="dropzone-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                <div class="dropzone-title">Drag and drop files here</div>
+                                <div class="dropzone-desc">or <span style="color: var(--primary-blue); cursor: pointer;">Browse files</span></div>
+                                <div style="font-size: 12px; color: var(--text-tertiary);">Supported: TXT, CSV, JSON, MD, PDF, JPG, PNG, MP3, WAV, MP4, MOV</div>
+                                <input type="file" id="fileInput" multiple style="display: none;" accept=".txt,.csv,.json,.md,.vtt,.srt,.xlsx,.xls,.pdf,.jpg,.jpeg,.png,.mp3,.wav,.m4a,.mp4,.mov">
+                            </div>
+                    
+                            <div id="fileQueueSection" class="hidden">
+                                <div class="flex justify-between items-center mt-4">
+                                    <h3>Uploaded files (<span id="fileCount">0</span>)</h3>
+                                    <button class="btn btn-ghost text-danger" id="clearQueueBtn" style="font-size: 13px;">Remove all</button>
+                                </div>
+                                <div class="file-list" id="fileList">
+                                    <!-- JS injected file items -->
+                                </div>
+                                <div class="flex" style="justify-content: flex-end; margin-top: var(--spacing-xl);">
+                                    <button class="btn btn-primary" id="analyzeBtn" disabled>Analyze feedback</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right column: Connected Sources -->
+                    <div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Connected Sources</h2>
+                                <button class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="app.syncAll()">Sync All</button>
+                            </div>
+                            <div class="kpi-list">
+                                <!-- Slack -->
+                                <div class="kpi-item">
+                                    <div class="kpi-icon"><svg class="icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path></svg></div>
+                                    <div class="kpi-details">
+                                        <div class="kpi-label">Slack</div>
+                                        <div class="kpi-value" style="font-size: 12px; color: var(--text-secondary);" id="slackStatus">Not configured</div>
+                                    </div>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="app.openConfigModal('slack')">Config</button>
+                                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="app.syncSource('slack')">Sync</button>
+                                    </div>
+                                </div>
+                                <!-- Zendesk -->
+                                <div class="kpi-item">
+                                    <div class="kpi-icon"><svg class="icon"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                                    <div class="kpi-details">
+                                        <div class="kpi-label">Zendesk</div>
+                                        <div class="kpi-value" style="font-size: 12px; color: var(--text-secondary);" id="zendeskStatus">Not configured</div>
+                                    </div>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="app.openConfigModal('zendesk')">Config</button>
+                                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="app.syncSource('zendesk')">Sync</button>
+                                    </div>
+                                </div>
+                                <!-- Survey -->
+                                <div class="kpi-item">
+                                    <div class="kpi-icon"><svg class="icon"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg></div>
+                                    <div class="kpi-details">
+                                        <div class="kpi-label">Survey Tool</div>
+                                        <div class="kpi-value" style="font-size: 12px; color: var(--text-secondary);" id="surveyStatus">Not configured</div>
+                                    </div>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="app.openConfigModal('survey')">Config</button>
+                                        <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="app.syncSource('survey')">Sync</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. PROCESSING -->
+            <div id="processingPage" class="page">
+                <div class="processing-screen">
+                    <div class="spinner-container">
+                        <svg viewBox="0 0 36 36" class="circular-chart">
+                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                            <path class="circle" id="processingRing" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; font-weight: 700; color: var(--primary-blue);" id="processingPercent">0%</div>
+                    </div>
+                    <h2>Processing your feedback</h2>
+                    <p class="subtitle" style="margin-bottom: 0;">This may take a few minutes. You can leave this page and we'll notify you when it's ready.</p>
+                    
+                    <div class="process-steps">
+                        <div class="process-step" id="step-upload">
+                            <div class="step-icon-wrapper"><svg class="icon"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                            Uploading Files
+                        </div>
+                        <div class="process-step" id="step-read">
+                            <div class="step-icon-wrapper"><svg class="icon"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                            Reading Feedback
+                        </div>
+                        <div class="process-step" id="step-extract">
+                            <div class="step-icon-wrapper"><svg class="icon"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                            Extracting Pain Points
+                        </div>
+                        <div class="process-step" id="step-discover">
+                            <div class="step-icon-wrapper"><svg class="icon"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                            Discovering Themes
+                        </div>
+                        <div class="process-step" id="step-prioritize">
+                            <div class="step-icon-wrapper"><svg class="icon"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                            Prioritizing Opportunities
+                        </div>
+                        <div class="process-step" id="step-report">
+                            <div class="step-icon-wrapper"><svg class="icon"><circle cx="12" cy="12" r="10"></circle></svg></div>
+                            Generating Report
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. INSIGHTS -->
+            <div id="insightsPage" class="page">
+                <div class="insights-header">
+                    <div>
+                        <h1>Customer Feedback Analysis <span class="status-badge status-success" style="margin-left: 12px; font-size: 11px;">Complete</span></h1>
+                        <p class="subtitle" id="insightsSubtitle">Analyzed on ...</p>
+                    </div>
+                    <div class="insights-controls">
+                        <select id="strategySelect" class="select-input">
+                            <option value="Increase Revenue">Increase Revenue</option>
+                            <option value="Improve Retention">Improve Retention</option>
+                            <option value="Reduce Churn">Reduce Churn</option>
+                            <option value="User Growth">User Growth</option>
+                            <option value="Enterprise Expansion">Enterprise Expansion</option>
+                        </select>
+                        <button class="btn btn-secondary" id="exportBtn">
+                            Export <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="insightsContent">
+                    <!-- Cards and themes injected via JS -->
+                </div>
+
+                <!-- Ask DiscoveryOS Inline Chat Box -->
+                <div id="insightsAskContainer" class="card hidden" style="margin-top: var(--spacing-xl); padding: var(--spacing-lg); border: 1px dashed var(--primary-blue); background: #F8FAFC;">
+                    <h3 style="margin-bottom: var(--spacing-xs); color: var(--primary-blue); display: flex; align-items: center; gap: 6px;">
+                        ✦ Ask DiscoveryOS
+                    </h3>
+                    <p style="font-size: 12.5px; color: var(--text-secondary); margin-bottom: var(--spacing-md);">
+                        Ask any question about this run's customer feedback themes, trends, or segments.
+                    </p>
+                    <div style="display: flex; gap: var(--spacing-sm);">
+                        <input type="text" id="insightsAskInput" placeholder="e.g. Which customer segment is experiencing the search issue?" class="select-input" style="flex: 1; border: 1px solid var(--border-color); border-radius: var(--border-radius-sm); padding: var(--spacing-sm) var(--spacing-md); font-size: 13px;">
+                        <button class="btn btn-primary" id="insightsAskBtn" onclick="app.askInsights()" style="display: flex; align-items: center; gap: 4px;">
+                            Ask AI
+                        </button>
+                    </div>
+                    <div id="insightsAskResponse" style="margin-top: var(--spacing-md); font-size: 13.5px; line-height: 1.6; display: none; padding: var(--spacing-md); background: #FFFFFF; border: 1px solid var(--border-color); border-radius: var(--border-radius-sm);">
+                        <!-- AI Response injected here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. EXECUTIVE SUMMARY -->
+            <div id="summaryPage" class="page">
+                <div class="insights-header">
+                    <div>
+                        <h1>Executive Summary</h1>
+                        <p class="subtitle">High-level overview of key findings and recommendations.</p>
+                    </div>
+                    <button class="btn btn-secondary" id="summaryExportBtn">Export PDF</button>
+                </div>
+                
+                <div id="summaryContent" class="card">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- 6. AI ROADMAP -->
+            <div id="roadmapPage" class="page">
+                <div class="insights-header">
+                    <div>
+                        <h1>
+                            <svg class="icon icon-lg" viewBox="0 0 24 24" style="display:inline; vertical-align: -3px; margin-right: 8px; color: var(--primary-blue);">
+                                <path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path>
+                            </svg>
+                            AI Roadmap Generator
+                        </h1>
+                        <p class="subtitle">AI-generated strategic roadmap based on your analysis — prioritized into Now, Next, and Later.</p>
+                    </div>
+                    <div class="insights-controls">
+                        <button class="btn btn-primary" id="generateRoadmapBtn">
+                            <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            Generate Roadmap
+                        </button>
+                    </div>
+                </div>
+
+                <div id="roadmapContent">
+                    <!-- Roadmap cards injected via JS -->
+                    <div class="roadmap-empty-state" id="roadmapEmptyState">
+                        <div class="roadmap-empty-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 20V10"></path><path d="M12 20V4"></path><path d="M6 20v-6"></path>
+                            </svg>
+                        </div>
+                        <h3>No roadmap generated yet</h3>
+                        <p>Click <strong>Generate Roadmap</strong> to create an AI-powered strategic roadmap from your analysis data.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. ENGINEERING VIEW -->
+            <div id="engineeringViewPage" class="page">
+                <!-- Injected by JS -->
+            </div>
+
+            <!-- 8. SALES VIEW -->
+            <div id="salesViewPage" class="page">
+                <!-- Injected by JS -->
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ===== COPILOT PANEL ===== -->
+    <button id="copilotFab" title="Ask DiscoveryOS AI">
+        <svg class="fab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            <line x1="9" y1="10" x2="15" y2="10"></line>
+            <line x1="12" y1="7" x2="12" y2="13"></line>
+        </svg>
+    </button>
+
+    <div id="copilotPanel">
+        <div class="copilot-header">
+            <div class="copilot-header-left">
+                <div class="copilot-avatar">✦</div>
+                <div>
+                    <div class="copilot-title">Ask DiscoveryOS</div>
+                    <div class="copilot-subtitle">AI Product Manager Copilot</div>
+                </div>
+            </div>
+            <button class="copilot-close" id="copilotClose">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+
+        <div class="copilot-messages" id="copilotMessages">
+            <!-- Messages injected by JS -->
+        </div>
+
+        <div class="copilot-suggestions" id="copilotSuggestions">
+            <!-- Suggestion chips injected by JS -->
+        </div>
+
+        <div class="copilot-input-area">
+            <textarea class="copilot-input" id="copilotInput" placeholder="Ask about your product data..." rows="1"></textarea>
+            <button class="copilot-send" id="copilotSend">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal for Config -->
+    <div id="configModal" class="modal hidden">
+        <div class="modal-content card">
+            <h2 id="configModalTitle">Configure Source</h2>
+            <div style="margin-bottom: var(--spacing-md);">
+                <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">Admin Key (X-Admin-Key)</label>
+                <input type="password" id="configAdminKey" class="select-input" style="width: 100%;">
+            </div>
+            <div style="margin-bottom: var(--spacing-lg);">
+                <label style="display:block; font-size:12px; font-weight:600; margin-bottom:4px;">API Token / Key</label>
+                <input type="password" id="configToken" class="select-input" style="width: 100%;">
+            </div>
+            <div class="flex" style="justify-content: flex-end; gap: var(--spacing-sm);">
+                <button class="btn btn-secondary" onclick="app.closeConfigModal()">Cancel</button>
+                <button class="btn btn-primary" id="saveConfigBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js?v=5"></script>
+</body>
+</html>
+

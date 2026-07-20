@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DiscoveryOS — Turn Customer Feedback into Product Priorities</title>
+    <meta name="description" content="DiscoveryOS transforms scattered customer feedback into evidence-backed product priorities using AI-powered extraction and transparent scoring.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-bg: #050B14;
+            --primary-blue: #2563EB;
+            --primary-hover: #1D4ED8;
+            --primary-light: #EFF6FF;
+            --bg-primary: #F7F9FC;
+            --bg-card: #FFFFFF;
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-tertiary: #94A3B8;
+            --border-color: #E2E8F0;
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 14px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAV */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 48px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.03em;
+        }
+        .nav-brand span { color: var(--primary-blue); }
+        .nav-actions { display: flex; gap: 12px; align-items: center; }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 9px 20px;
+            border-radius: var(--border-radius-sm);
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 150ms ease;
+            letter-spacing: -0.01em;
+        }
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+        }
+        .btn-ghost:hover { background: var(--bg-primary); color: var(--text-primary); }
+        .btn-primary {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(37,99,235,0.25); }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-blue);
+            border: 1.5px solid var(--primary-blue);
+        }
+        .btn-outline:hover { background: var(--primary-light); }
+        .btn-lg { padding: 13px 28px; font-size: 15px; border-radius: var(--border-radius); }
+
+        /* HERO */
+        .hero {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 100px 48px 80px;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-block;
+            font-size: 11.5px;
+            font-weight: 600;
+            letter-spacing: 0.07em;
+            text-transform: uppercase;
+            color: var(--primary-blue);
+            background: var(--primary-light);
+            padding: 5px 14px;
+            border-radius: 100px;
+            margin-bottom: 28px;
+            border: 1px solid #BFDBFE;
+        }
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.04em;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+        .hero h1 em {
+            font-style: normal;
+            color: var(--primary-blue);
+        }
+        .hero-sub {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 580px;
+            margin: 0 auto 40px;
+            line-height: 1.65;
+            font-weight: 400;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .hero-note {
+            margin-top: 20px;
+            font-size: 12.5px;
+            color: var(--text-tertiary);
+        }
+
+        /* FEATURES */
+        .features {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 48px 100px;
+        }
+        .features-label {
+            text-align: center;
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+            margin-bottom: 48px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 32px 28px;
+            transition: box-shadow 200ms ease, transform 200ms ease;
+        }
+        .feature-card:hover {
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+            transform: translateY(-2px);
+        }
+        .feature-label {
+            font-size: 10.5px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+        }
+        .feature-card h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.02em;
+        }
+        .feature-card p {
+            font-size: 13.5px;
+            color: var(--text-secondary);
+            line-height: 1.65;
+        }
+
+        /* DIVIDER */
+        .divider {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 48px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* SOCIAL PROOF */
+        .proof {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 72px 48px;
+            text-align: center;
+        }
+        .proof h2 {
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+        }
+        .proof p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* FOOTER */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 28px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .footer-brand {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        .footer-note {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 0 20px; }
+            .hero { padding: 60px 20px 60px; }
+            .hero h1 { font-size: 34px; }
+            .features { padding: 0 20px 60px; }
+            .features-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 8px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-brand">Discovery<span>OS</span></div>
+        <div class="nav-actions">
+            <a href="/login" class="btn btn-ghost">Log In</a>
+            <a href="/signup" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">AI-Powered Product Intelligence</div>
+        <h1>Turn scattered feedback into <em>evidence-backed</em> priorities</h1>
+        <p class="hero-sub">
+            DiscoveryOS reads your customer feedback, extracts pain points, clusters themes, and scores them — so your team builds what matters most.
+        </p>
+        <div class="hero-actions">
+            <a href="/signup" class="btn btn-primary btn-lg">Get Started</a>
+            <a href="/login" class="btn btn-outline btn-lg">Log In</a>
+        </div>
+        <p class="hero-note">No credit card required &nbsp;&middot;&nbsp; Ready in minutes</p>
+    </section>
+
+    <section class="features">
+        <p class="features-label">What DiscoveryOS does</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-label">01 &nbsp;Extract</div>
+                <h3>AI-powered extraction</h3>
+                <p>
+                    Automatically reads feedback from files, calls, tickets, and surveys. Extracts structured pain points from unstructured text using Gemini.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-label">02 &nbsp;Score</div>
+                <h3>Transparent scoring</h3>
+                <p>
+                    Every theme receives a priority score built from five weighted dimensions — customer impact, severity, business impact, strategic alignment, and segment value. No black boxes.
+                </p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-label">03 &nbsp;Prioritize</div>
+                <h3>Strategy-adaptive prioritization</h3>
+                <p>
+                    Switch between strategies — Improve Retention, Increase Revenue, Reduce Churn — and watch priorities re-rank instantly. The data stays the same; the lens changes.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section class="proof">
+        <h2>Ready to build with confidence?</h2>
+        <p>Connect your feedback sources, run an analysis, and walk into your next planning meeting with a ranked, evidence-backed priority list.</p>
+        <a href="/signup" class="btn btn-primary btn-lg">Create your account</a>
+    </section>
+
+    <footer>
+        <div class="footer-brand">DiscoveryOS</div>
+        <div class="footer-note">Product intelligence for modern teams</div>
+    </footer>
+
+</body>
+</html>

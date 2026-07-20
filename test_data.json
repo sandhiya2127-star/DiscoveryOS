@@ -1,0 +1,4 @@
+[
+  {"raw_text": "Search is useless, I can't find anything, this is urgent", "source": "support_ticket", "segment": "Enterprise", "customer_id": "cust_001"},
+  {"raw_text": "Would be nice to have dark mode someday", "source": "survey", "segment": "Free", "customer_id": "cust_003"}
+]
